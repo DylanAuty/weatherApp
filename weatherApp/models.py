@@ -56,13 +56,12 @@ class forecast(models.Model):
                         This may not be used but will be stored anyway.
     * title:            Describes time period forecast refers to. A day of the week, plus optionally the word "night", if pulled from txt_forecast, else None.
     * fcttext_metric:   Contains a text forecast, with metric units. API returns an Imperial one too, which won't be used.
-    * pop:              Probability of Precipitation. A percentage.
-    * conditions:        Text description of conditions. 
+
                         See https://www.wunderground.com/weather/api/d/docs?d=resources/phrase-glossary for details.
     * max_windspeed:    Maximum windspeed in Km/h
     * max_winddir:      Direction of maximum winds that period.
     * ave_windspeed:    Average windspeed in Km/h
-    * ave_winddir:      Average wind direction (N, ESE etc.) 
+    * ave_winddir:      Average wind direction (North, ESE etc.). 20 chars as one listed val. is 'variable'.
     * ave_humidity:     Percentage average humidity.
     * max_humidity:     Percentage maximum humidity. Seems to malfunction (showed 0 when ave was 74 in one example)
     * min_humidity:     Percentage minimum humidity, same issue as with max_humidity.
@@ -87,13 +86,59 @@ class forecast(models.Model):
     low = models.IntegerField()             # Temp. low in Celcius.
     conditions = models.CharField()         # Condition description.
     max_windspeed = models.IntegerField()   # In Km/h
-    max_winddir = models.CharField(max_length=5)  # Compass direction (NNE, ESE etc.)
+    max_winddir = models.CharField(max_length=20)  # Compass direction (NNE, ESE etc.)
     ave_windspeed = models.IntegerField()
-    ave_winddir = models.CharField(max_length=5)
+    ave_winddir = models.CharField(max_length=20)
     ave_humidity = models.IntegerField()    # Percentage
     max_humidity = models.IntegerField()    # Percentage, weirdly returns 0 sometimes.
     min_humidity = models.IntegerField()    # Also 0 sometimes for no reason.
     
+class conditions(models.Model):
+    """
+    Represents current conditions somewhere. Some fields overlap with forecast, but
+    the API delivers a separate conditions object that contains other things as well.
+
+    Fields:
+	* display_location:	
+	* observation_timestamp: Used in conjunction with location timezone.
+	* observation_tz:           This may not be needed
+        * weather:                  A text description of the current weather ("Mostly cloudy", "Chance of rain" etc.)
+        * temperature:              Temperature, in degrees Celsius.
+        * humidity:                 Percentage relative humidity.
+        * wind_dir:                 A compass direction, or "Variable".
+        * windspeed:                 Nominal windspeed, metric.
+        * windspeed_gust:            Gusting windspeed, metric. For some reason this can sometimes be 0, it is unclear what this is indicating (documentation missing from Wunderground)
+        * pressure:              Atmospheric pressure, millibars.
+        * dewpoint:                 The dewpoint, in degrees Celsius.
+        * feelslike:                The feels like temperature, taking into account wind chill, humidity etc.
+        * visibility:               The visibility in km.
+        * uv:                       The UV index
+        * precip_1hr:               The precipitation in the next hour, mm. Can be "--".
+        * precip_today:             The precipitation in the next day, mm. Can be "--".
+        * icon:                     The name of the icon to use for these conditions.
+        * icon_url:                 The URL of the icon to use.
+        * forecast_url:             URL of the Wunderground page for this forecast.
+    """
+
+    display_location = models.ForeignKey('location', on_delete=models.CASCADE)
+    observation_timestamp = models.DateTimeField()
+    observation_tz = models.CharField(max_length=20)
+    weather = models.CharField(max_length=100)
+    temperature = models.IntegerField()
+    humidity = models.IntegerField()
+    wind_dir = models.CharField(max_length=20)
+    windspeed = models.IntegerField()
+    windspeed_gust = models.IntegerField()
+    pressure = models.IntegerField()
+    dewpoint = models.IntegerField()
+    feelslike = models.IntegerField()
+    visibility = models.IntegerField()
+    uv = models.IntegerField()
+    precip_1hr = models.IntegerField()
+    precip_today = models.IntegerField()
+    icon = models.CharField(max_length=20)
+    icon_url = models.URLField(max_length=200)
+    forecast_url = models.URLField(max_length=200)
 
 
 
