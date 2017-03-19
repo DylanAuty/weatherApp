@@ -1,2 +1,45 @@
 {% extends "weatherApp/base/base.html" %}
+{% load static %}
 
+{% block content %}
+	<div class="container">
+		<div id="weatherDataRow" class="row">
+			<!-- Today overview -->
+			<div class="col-xs-12 col-sm-4">
+				<div class="panel panel-default">
+					{% lorem %}
+				</div>
+			</div>
+
+			<!-- Today text outlook and next 3 days mini overview -->
+			<div class="col-xs-12 col-sm-8">
+				<!-- Top row - Outlook for today -->
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+							{% lorem %}
+						</div>
+					</div>
+				</div>
+				<!-- Bottom row - mini overview, next few days -->
+				<div class="row">
+					<div class="col-xs-12 col-sm-4">
+						<div class="panel panel-default">
+						{% lorem %}
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<div class="panel panel-default">
+						{% lorem %}
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4">
+						<div class="panel panel-default">
+						{% lorem %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}
