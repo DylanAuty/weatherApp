@@ -11,15 +11,21 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+import ConfigParser
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT_DIR = os.path.dirname(BASE_DIR)
 
+# Fetch the private settings
+config = ConfigParser.SafeConfigParser(allow_no_value=True)
+config.read(os.path.join(ROOT_DIR, 'private_settings.cfg'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+WUNDERGROUND_API_KEY = config.get('API keys', 'WEATHERUNLOCKED_API_KEY')
 SECRET_KEY = 'c&s5mao3%n9*d1n)&o49q@2%898!6ims#5rxh+7e)(ou4h5bix'
 
 # SECURITY WARNING: don't run with debug turned on in production!
