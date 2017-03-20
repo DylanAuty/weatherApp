@@ -25,7 +25,7 @@ config.read(os.path.join(ROOT_DIR, 'private_settings.cfg'))
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-WUNDERGROUND_API_KEY = config.get('API keys', 'WEATHERUNLOCKED_API_KEY')
+WUNDERGROUND_API_KEY = config.get('API keys', 'WUNDERGROUND_API_KEY')
 SECRET_KEY = 'c&s5mao3%n9*d1n)&o49q@2%898!6ims#5rxh+7e)(ou4h5bix'
 
 # SECURITY WARNING: don't run with debug turned on in production!
