@@ -84,7 +84,7 @@ class forecast(models.Model):
     pop = models.IntegerField()             # Probability of Precipitation. A percentage.
     high = models.IntegerField()            # Temp. high in Celcius
     low = models.IntegerField()             # Temp. low in Celcius.
-    conditions = models.CharField()         # Condition description.
+    conditions = models.CharField(max_length=200)         # Condition description.
     max_windspeed = models.IntegerField()   # In Km/h
     max_winddir = models.CharField(max_length=20)  # Compass direction (NNE, ESE etc.)
     ave_windspeed = models.IntegerField()
