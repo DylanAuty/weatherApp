@@ -64,7 +64,8 @@ def getCurrentWeather(request):
         fc_index = (i / 2)  # fc_index maps i -> period - 1 of simpleforecast.
         
         # For day/night specific fields from txt_forecast
-        if(fc_index % 2 == 0):
+        print(i)
+        if(i % 2 == 0):
             forecastArr[fc_index].date = forecastDate
             forecastArr[fc_index].retrieved = datetime.now()
             forecastDate += oneDayDelta
@@ -78,8 +79,12 @@ def getCurrentWeather(request):
             forecastArr[fc_index].icon_tf_night = textForecastDict[i]['icon']
             forecastArr[fc_index].icon_tf_night_url = textForecastDict[i]['icon_url']
             forecastArr[fc_index].fcttext_metric_night = textForecastDict[i]['fcttext_metric']
+
             forecastArr[fc_index].pop_tf_night = textForecastDict[i]['pop']
         
+        # Assign location
+        forecastArr[fc_index].location = currLoc
+
         # All other fields, from simpleforecast.
         forecastArr[fc_index].icon_sf = simpleForecastDict[fc_index]['icon']
         forecastArr[fc_index].icon_sf_url = simpleForecastDict[fc_index]['icon_url']
@@ -94,6 +99,9 @@ def getCurrentWeather(request):
         forecastArr[fc_index].ave_humidity = simpleForecastDict[fc_index]['avehumidity']
         forecastArr[fc_index].max_humidity = simpleForecastDict[fc_index]['maxhumidity']
         forecastArr[fc_index].min_humidity = simpleForecastDict[fc_index]['minhumidity']
+        
+    for i in range(4):
+        forecastArr[i].save()
 
     return HttpResponse(forecastArr)
 
