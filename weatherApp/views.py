@@ -2,8 +2,12 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from django.conf import settings
+from datetime import date, datetime, timedelta
 import requests
 import json
+
+# Model imports
+from weatherApp.models import location, forecast, conditions
 
 def index(request):
     # Retrieve most recent entry for London from DB, stick into context and return it.
@@ -15,17 +19,83 @@ def index(request):
     return render(request, 'weatherApp/index.html', context)
 
 def getCurrentWeather(request):
-    # Dummy placeholder text
+    """
+    Fetches the current weather.
+    """
+
+    # Dummy placeholder text, this will be retrieved from the autocomplete API
     locationString = "/q/zmw:00000.1.03772"
     #requestURL = "http://api.wunderground.com/api/" + settings.WUNDERGROUND_API_KEY + "/forecast" + locationString + ".json"
-    requestURL = "file:///home/da-sol-vb/Documents/HealthUnlocked/forecastEx.json"
+    requestURL = "http://127.0.0.1:8000/getExampleForecastJSON"
 
-    API_response = requests.get(requestURL)
-    #print(type(API_response.json()))
-    #API_response_JSON = json.loads(API_response)
-    #print(API_response_JSON.dumps)
+    APIResponseRaw = requests.get(requestURL)       # Keep raw data in case any other response info is needed.
+    APIResponseDict = APIResponseRaw.json()
+    ForecastDict = APIResponseDict['forecast']
+    textForecastDict = ForecastDict['txt_forecast']['forecastday']
+    simpleForecastDict = ForecastDict['simpleforecast']['forecastday']
+    
+    # See if the locations is stored. If not, store it.
+    try:
+        currLoc = location.objects.get(api_ref_string=locationString)
+    except location.DoesNotExist:
+        currLoc = location()
+        currLoc.api_ref_string = locationString          ## PLACEHOLDER
+        currLoc.location_type = APIResponseDict['location']['type']
+        currLoc.country = APIResponseDict['location']['country']
+        currLoc.country_iso3166 = APIResponseDict['location']['country_iso3166']
+        currLoc.country_name = APIResponseDict['location']['country_name']
+        currLoc.state = APIResponseDict['location']['state']
+        currLoc.city = APIResponseDict['location']['city']
+        currLoc.tz_short = APIResponseDict['location']['tz_short']
+        currLoc.tz_long = APIResponseDict['location']['tz_long']
+        currLoc.lat = APIResponseDict['location']['lat']
+        currLoc.lon = APIResponseDict['location']['lon']
+        currLoc.save()
 
-    return HttpResponse(API_response)
+    # Loop over the txt_forecasts, extracting relevant data.
+    # There are 8 periods. For txt_forecast, 2 per day. For simpleforecast, 1 per day, starting at 1.
+    
+    # Instantiate 4 forecasts. Loop over forecastDays, adding to correct forecast depending on their period.
+    forecastArr = [forecast() for i in range(4)]
+    forecastDate = date.today()     # Assumption is that forecasts begin today.
+    oneDayDelta = timedelta(days=1) # To increment the date stored for the forecast. Instantiated once here to save time.
+    
+    for i in range(8):
+        fc_index = (i / 2)  # fc_index maps i -> period - 1 of simpleforecast.
+        
+        # For day/night specific fields from txt_forecast
+        if(fc_index % 2 == 0):
+            forecastArr[fc_index].date = forecastDate
+            forecastArr[fc_index].retrieved = datetime.now()
+            forecastDate += oneDayDelta
+            
+            forecastArr[fc_index].icon_tf_day = textForecastDict[i]['icon']
+            forecastArr[fc_index].icon_tf_day_url = textForecastDict[i]['icon_url']
+            forecastArr[fc_index].fcttext_metric_day = textForecastDict[i]['fcttext_metric']
+            forecastArr[fc_index].pop_tf_day = textForecastDict[i]['pop']
+
+        else:
+            forecastArr[fc_index].icon_tf_night = textForecastDict[i]['icon']
+            forecastArr[fc_index].icon_tf_night_url = textForecastDict[i]['icon_url']
+            forecastArr[fc_index].fcttext_metric_night = textForecastDict[i]['fcttext_metric']
+            forecastArr[fc_index].pop_tf_night = textForecastDict[i]['pop']
+        
+        # All other fields, from simpleforecast.
+        forecastArr[fc_index].icon_sf = simpleForecastDict[fc_index]['icon']
+        forecastArr[fc_index].icon_sf_url = simpleForecastDict[fc_index]['icon_url']
+        forecastArr[fc_index].pop = simpleForecastDict[fc_index]['pop']
+        forecastArr[fc_index].high = simpleForecastDict[fc_index]['high']['celsius']
+        forecastArr[fc_index].low = simpleForecastDict[fc_index]['low']['celsius']
+        forecastArr[fc_index].conditions = simpleForecastDict[fc_index]['conditions']
+        forecastArr[fc_index].max_windspeed = simpleForecastDict[fc_index]['maxwind']['kph']
+        forecastArr[fc_index].max_winddir = simpleForecastDict[fc_index]['maxwind']['dir']
+        forecastArr[fc_index].ave_windspeed = simpleForecastDict[fc_index]['avewind']['kph']
+        forecastArr[fc_index].ave_winddir = simpleForecastDict[fc_index]['avewind']['dir']
+        forecastArr[fc_index].ave_humidity = simpleForecastDict[fc_index]['avehumidity']
+        forecastArr[fc_index].max_humidity = simpleForecastDict[fc_index]['maxhumidity']
+        forecastArr[fc_index].min_humidity = simpleForecastDict[fc_index]['minhumidity']
+
+    return HttpResponse(forecastArr)
 
 
 def getExampleForecastJSON(request):
@@ -33,4 +103,5 @@ def getExampleForecastJSON(request):
     Retrieves an example forecast for London from local.
     Used for debugging, to avoid exceeding API limits.
     """
+    
     return render(request, 'weatherApp/forecastEx.json')
