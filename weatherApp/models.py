@@ -20,10 +20,11 @@ class location(models.Model):
     * lat:              Latitude, in decimal degrees format.
     * lon:              Longitude, in decimal degrees format.
     """
-
+    
+    api_ref_string = models.CharField(max_length=200)
     location_type = models.CharField(max_length=200)
     country = models.CharField(max_length=20)
-    country_iso3116 = models.CharField(max_length=20)
+    country_iso3166 = models.CharField(max_length=20)
     country_name = models.CharField(max_length = 200)
     state = models.CharField(max_length = 20)
     city = models.CharField(max_length = 200)
@@ -36,52 +37,62 @@ class forecast(models.Model):
     """
     Represents a weather forecast.
     Data collated from txt_forecast and simpleforecast objects returned by Wunderground API.
+    A forecast instance represents the weather forecast for a day. It includes day/night text forecasts and chances of rain, and 
+    a more detailed forecast for the whole of the day.
 
     Fields:
-    * location:         Foreign key to location table. Every forecast has a location.
-                        If location gets deleted then all forecasts for that location will go too.
-    * period:           A number from 0 to ??? (WU docs incomplete, probably 7 or 13?).
-                        Refers to a half of a particular day of the week.
-    * date:             The date the forecast refers to. A DateTime object.
-                        Used in conjunction with ampm and period.
-    * ampm:             Whether the forecast refers to the morning (AM) or evening (PM).
-    * icon_tf:          From txt_forecast, icon returned from txt_forecast and simpleforecast will differ.
-                        A keyword describing the weather icon to be used (cloudy, sunny etc.)
-    * icon_sf:          From simpleforecast. A keyword describing the weather icon to be used (cloudy, sunny etc.)
-    * icon_tf_url:      From txt_forecast. Sometimes the icons differ between the two.
-                        The API returns a URL for an icon resource.
-                        This may not be used but will be stored anyway.
-    * icon_sf_url:      From simpleforecast.
-                        The API returns a URL for an icon resource.
-                        This may not be used but will be stored anyway.
-    * title:            Describes time period forecast refers to. A day of the week, plus optionally the word "night", if pulled from txt_forecast, else None.
-    * fcttext_metric:   Contains a text forecast, with metric units. API returns an Imperial one too, which won't be used.
-
-                        See https://www.wunderground.com/weather/api/d/docs?d=resources/phrase-glossary for details.
-    * max_windspeed:    Maximum windspeed in Km/h
-    * max_winddir:      Direction of maximum winds that period.
-    * ave_windspeed:    Average windspeed in Km/h
-    * ave_winddir:      Average wind direction (North, ESE etc.). 20 chars as one listed val. is 'variable'.
-    * ave_humidity:     Percentage average humidity.
-    * max_humidity:     Percentage maximum humidity. Seems to malfunction (showed 0 when ave was 74 in one example)
-    * min_humidity:     Percentage minimum humidity, same issue as with max_humidity.
+    * location:             Foreign key to location table. Every forecast has a location.
+                            If location gets deleted then all forecasts for that location will go too.
+    * date:                 The date the forecast refers to. A Date object. Inferred from retrieval date, possibly checked against an epoch from simpleforecast.
+    * last_updated:         The timestamp the forecast was updated, as reported by Wunderground.
+    * retrieved:            The timestamp the forecast was retrieved from the server at.
+    * icon_tf_day:          From txt_forecast, for the day. Icon returned from txt_forecast and simpleforecast will differ.
+                            A keyword describing the weather icon to be used (cloudy, sunny etc.)
+    * icon_tf_night:        From txt_forecast, for the night.
+    * icon_sf:              From simpleforecast. A keyword describing the weather icon to be used (cloudy, sunny etc.)
+    * icon_tf_day_url:      From txt_forecast, for the day icon. The API returns a URL for an icon resource. This may not be used but will be stored anyway.
+    * icon_tf_day_url:      From txt_forecast, for the night icon.
+    * icon_sf_url:          From simpleforecast.
+    * fcttext_metric_day:   Contains a text forecast for the day, with metric units. API returns an Imperial one too, which won't be used.
+    * fcttext_metric_night: Contains a text forecast for the night, with metric units. API returns an Imperial one too, which won't be used.
+                            See https://www.wunderground.com/weather/api/d/docs?d=resources/phrase-glossary for details.
+    * pop:                  Probability of precipitation (%) for the whole day. Derived from simpleforecast.
+    * pop_tf_day:           Probability of precipitation (%) for the daytime. Derived from txt_forecast. Storing 3 different pops as they sometimes don't
+                            match up, so will present them as given.
+    * pop_tf_night:         Probability of precipitation (%) for the night.
+    * high:                 Temp. high (C) for the whole day. From simpleforecast.
+    * low:                  Temp. low (C) for the whole day. From simpleforecast.
+    * conditions:           Text description of the weather conditions for the entire day. Derived from simpleforecast.
+    * max_windspeed:        Maximum windspeed in Km/h
+    * max_winddir:          Direction of maximum winds that period.
+    * ave_windspeed:        Average windspeed in Km/h
+    * ave_winddir:          Average wind direction (North, ESE etc.). 20 chars as one listed val. is 'variable'.
+    * ave_humidity:         Percentage average humidity.
+    * max_humidity:         Percentage maximum humidity. Seems to malfunction (showed 0 when ave was 74 in one example)
+    * min_humidity:         Percentage minimum humidity, same issue as with max_humidity.
     """
     
     # Metadata (time/location)
     location = models.ForeignKey('location', on_delete=models.CASCADE)
-    period = models.IntegerField()
-    date = models.DateTimeField()
-    ampm = models.CharField(max_length=10)       # 10 chars as a precaution
+    date = models.DateField()
+    retrieved = models.DateTimeField()
+
     # Icons
-    icon_tf = models.CharField(max_length=20)   # From txt_forecast. Current max length used is 14.
-    icon_sf = models.CharField(max_length=20)   # From simpleforecast
-    icon_tf_url = models.URLField(max_length=200)   # From txt_forecast.
-    icon_sf_url = models.URLField(max_length=200)   # From simpleforecast
-    title = models.CharField(max_length=20) # <day of the week + optionally " night">
-    fcttext_metric = models.CharField(max_length=200)   # There is also an imperial field returned called fcttext, which won't be used. Name fcttext_metric chosen for consistency with API responses.
+    icon_tf_day = models.CharField(max_length=20)           # From txt_forecast. Current max length used is 14.
+    icon_tf_night = models.CharField(max_length=20)         # From txt_forecast. Current max length used is 14.
+    icon_sf = models.CharField(max_length=20)               # From simpleforecast
+    icon_tf_day_url = models.URLField(max_length=200)       # From txt_forecast.
+    icon_tf_night_url = models.URLField(max_length=200)     # From txt_forecast.
+    icon_sf_url = models.URLField(max_length=200)           # From simpleforecast
     
+    # Text forecasts
+    fcttext_metric_day = models.CharField(max_length=200)   # Name fcttext_metric chosen for consistency with API responses.
+    fcttext_metric_night = models.CharField(max_length=200)
+
     # Raw weather data
-    pop = models.IntegerField()             # Probability of Precipitation. A percentage.
+    pop = models.IntegerField()             # Probability of Precipitation. A percentage. This taken from simpleforecast, referring to the whole day.
+    pop_tf_day = models.IntegerField()      # As above, but taken from txt_forecast and referring to the day. Stored as sometimes the three pop fields don't correspond, so will be shown as given.
+    pop_tf_night = models.IntegerField()    # As above, but for night.
     high = models.IntegerField()            # Temp. high in Celcius
     low = models.IntegerField()             # Temp. low in Celcius.
     conditions = models.CharField(max_length=200)         # Condition description.
