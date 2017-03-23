@@ -32,7 +32,10 @@ class location(models.Model):
     tz_long = models.CharField(max_length = 64)
     lat = models.CharField(max_length = 200)
     lon = models.CharField(max_length = 200)
+
     
+
+
 class forecast(models.Model):
     """
     Represents a weather forecast.
