@@ -49,12 +49,24 @@ body {
 
 /* Restyling panels */
 
-.panel {
-	background-color: #1F7A8C;
-}
-
 .panel.text-muted {
 	color: #E1E5F2;
+}
+
+/* Bumping up the size of wind icons */
+.weatherField-span {
+	font-size: 2em;
+}
+
+.wind-span-sm span {
+}
+
+#mainPanelHeader-span {
+	font-size: 2em;
+	font-style: italic;
+}
+#mainPanelIcon {
+	font-size: 4em;
 }
 
 /* Forecast page - style columns to be the same height */
@@ -66,4 +78,12 @@ body {
 	float: none;
 	display: table-cell;
 	vertical-align: top;
+}
+
+#highTemp {
+	font-size: 3em;
+}
+
+#lowTemp {
+	font-size: 1.5em;
 }
