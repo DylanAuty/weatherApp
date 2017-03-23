@@ -1,8 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.template import Context
 
 from django.conf import settings
 from datetime import date, datetime, timedelta
+from weatherApp.utils import utils
 import requests
 import json
 
@@ -10,11 +12,35 @@ import json
 from weatherApp.models import location, forecast, conditions
 
 def index(request):
+    """
+    The weather landing page.
+    Retrieves and serves last known request for London at start.
+    On page load, an AJAX request will check for updates from the server.
+    If an update is available, it will retrieve it and AJAX will fill it in.
+    This way, the page appears to load as fast as possible for the user.
+    Later comes pretty cacheing.
+    """
+
     # Retrieve most recent entry for London from DB, stick into context and return it.
     # If one doesn't exist, then fire the querying method.
     
-    context = {
+    searchString = "London"     # PLACEHOLDER
+    # Autocomplete search and reference string retrieval
+    searchResults = utils.getAutocompleteResults(searchString)
 
+    locationString = "/q/zmw:00000.1.03772"
+    
+    try:
+        fcToday = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()).latest('retrieved')
+    except forecast.DoesNotExist:
+        # If there is no forecast in the database then we need to retrieve and store it.
+        # The retrieval method will save and return the object, ideally it will save asynchronously.
+        pass
+
+    context = {
+            "currTime": datetime.now(),
+            "retrievalTime": fcToday.retrieved,
+            "fcToday": fcToday
             }
     return render(request, 'weatherApp/index.html', context)
 
@@ -82,9 +108,11 @@ def getCurrentWeather(request):
 
             forecastArr[fc_index].pop_tf_night = textForecastDict[i]['pop']
         
+
+    for fc_index in range(4):
         # Assign location
         forecastArr[fc_index].location = currLoc
-
+            
         # All other fields, from simpleforecast.
         forecastArr[fc_index].icon_sf = simpleForecastDict[fc_index]['icon']
         forecastArr[fc_index].icon_sf_url = simpleForecastDict[fc_index]['icon_url']
@@ -100,8 +128,7 @@ def getCurrentWeather(request):
         forecastArr[fc_index].max_humidity = simpleForecastDict[fc_index]['maxhumidity']
         forecastArr[fc_index].min_humidity = simpleForecastDict[fc_index]['minhumidity']
         
-    for i in range(4):
-        forecastArr[i].save()
+        forecastArr[fc_index].save()
 
     return HttpResponse(forecastArr)
 
