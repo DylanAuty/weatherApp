@@ -1,0 +1,22 @@
+{% extends "weatherApp/base/base.html" %}
+{% load static %}
+
+{% block content %}
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12 col-md-8 col-md-offset-2">
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<div class="col-xs-12">
+							<h3>
+								<strong>About this site</strong>
+							</h3>
+							A weather forecast app, built by <a href="https://github.com/DylanAuty">Dylan Auty</a> (<a href="mailto:dylan.auty@gmail.com">email</a>) using Django and Postgresql.
+							Weather data provided by <a href="https://wunderground.com"><img width="100%" src="{% static 'weatherApp/img/wundergroundLogo_4c_horz.png' %}" alt="Wunderground Logo"/></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock content %}

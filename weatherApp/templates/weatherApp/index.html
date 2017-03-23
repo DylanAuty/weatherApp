@@ -76,7 +76,18 @@
 				<div class="row">
 					<div class="col-xs-12">
 						<div class="panel panel-default">
-							{% lorem %}
+							<div class="panel-body">
+								<div class="col-xs-12">
+									<h4>
+										<strong>Today's outlook:</strong>
+									</h4>
+									{{ fcToday.fcttext_metric_day }}
+									<h4>
+										<strong>Tonight:</strong>
+									</h4>
+									{{ fcToday.fcttext_metric_night }}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -84,7 +95,13 @@
 				<div class="row">
 					<div class="col-xs-12 col-sm-4">
 						<div class="panel panel-default">
-						{% lorem %}
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-12">
+										
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4">
