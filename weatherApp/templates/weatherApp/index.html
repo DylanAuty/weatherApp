@@ -7,8 +7,66 @@
 			<!-- Today overview -->
 			<div class="col-xs-12 col-sm-4">
 				<div class="panel panel-default">
-					
-					
+					<div class="panel-body">
+						<div id="mainPanelHeader" class="row">
+							<div class="col-xs-12">
+								<span id="mainPanelHeader-span">Today</span>
+							</div>
+						</div>
+						<div id="locationRow" class="row">
+							<div class="col-xs-12">
+								<h4>
+									{{ fcToday.location.city }}, {{ fcToday.location.state }}, {{ fcToday.location.country_name }}
+								</h4>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<span class="text-info">
+									Last updated: {{ fcToday.retrieved|date }} at {{ fcToday.retrieved|time:"H:i" }}
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-7">
+								<div class="row">
+									<div class="col-xs-12">
+										<span><span id="highTemp">{{ fcToday.high }}&degC</span> <small>Hi</small></span>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<span><span id="lowTemp">{{ fcToday.low }}&degC</span> <small>Low</small></span>
+									</div>
+								</div>
+							</div>
+							<div class="col-xs-5">
+								<i id="mainPanelIcon" class="wi wi-wu-{{ fcToday.icon_sf }}"></i>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<span class="weatherField-span pull-left">Wind: </span>
+								<span class="weatherField-span pull-right">
+									{{ fcToday.ave_windspeed }} <small>Km/h</small> <i class="wi wi-wind wi-towards-{{ fcToday.ave_winddir|lower }}"></i>
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<span class="weatherField-span pull-left"><small>Gust: </small></span>
+								<span class="weatherField-span wind-span-sm pull-right">
+									<small>{{ fcToday.max_windspeed }} <small>Km/h</small></small> <i class="wi wi-wind wi-towards-{{ fcToday.max_winddir|lower }}"></i>
+								</span>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-xs-12">
+								<span class="weatherField-span pull-left">Humidity: </span>
+								<span class="weatherField-span pull-right">{{ fcToday.ave_humidity }}%</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 
