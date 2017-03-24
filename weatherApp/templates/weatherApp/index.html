@@ -41,7 +41,7 @@
 								</div>
 							</div>
 							<div class="col-xs-5">
-								<i id="mainPanelIcon" class="wi wi-wu-{{ fcToday.icon_sf }}"></i>
+								<i id="panelIcon" class="wi wi-wu-{{ fcToday.icon_sf }}"></i>
 							</div>
 						</div>
 						<div class="row">
@@ -94,24 +94,126 @@
 				<!-- Bottom row - mini overview, next few days -->
 				<div class="row">
 					<div class="col-xs-12 col-sm-4">
-						<div class="panel panel-default">
+						<div class="smallday-panel panel panel-default">
 							<div class="panel-body">
 								<div class="row">
 									<div class="col-xs-12">
-										
+										Tomorrow ({{ fcNext1.date|date:"D d M" }})
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-7">
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="highTemp">{{ fcNext1.high }}&degC</span> <small>Hi</small></span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="lowTemp">{{ fcNext1.low }}&degC</span> <small>Low</small></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-5">
+										<i id="panelIcon" class="wi wi-wu-{{ fcNext1.icon_sf }}"></i>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<h4>
+											Outlook:
+										</h4>
+										<p>
+											Day: {{ fcNext1.fcttext_metric_day }}
+										</p>
+										<p>
+											Night: {{ fcNext1.fcttext_metric_night }}
+										</p>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4">
-						<div class="panel panel-default">
-						{% lorem %}
+						<div class="smallday-panel panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-12">
+										{{ fcNext2.date|date:"D d M" }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-7">
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="highTemp">{{ fcNext2.high }}&degC</span> <small>Hi</small></span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="lowTemp">{{ fcNext2.low }}&degC</span> <small>Low</small></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-5">
+										<i id="panelIcon" class="wi wi-wu-{{ fcNext2.icon_sf }}"></i>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<h4>
+											Outlook:
+										</h4>
+										<p>
+											Day: {{ fcNext2.fcttext_metric_day }}
+										</p>
+										<p>
+											Night: {{ fcNext2.fcttext_metric_night }}
+										</p>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 					<div class="col-xs-12 col-sm-4">
-						<div class="panel panel-default">
-						{% lorem %}
+						<div class="smallday-panel panel panel-default">
+							<div class="panel-body">
+								<div class="row">
+									<div class="col-xs-12">
+										{{ fcNext3.date|date:"D d M" }}
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-7">
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="highTemp">{{ fcNext3.high }}&degC</span> <small>Hi</small></span>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-xs-12">
+												<span><span id="lowTemp">{{ fcNext3.low }}&degC</span> <small>Low</small></span>
+											</div>
+										</div>
+									</div>
+									<div class="col-xs-5">
+										<i id="panelIcon" class="wi wi-wu-{{ fcNext3.icon_sf }}"></i>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-xs-12">
+										<h4>
+											Outlook:
+										</h4>
+										<p>
+											Day: {{ fcNext3.fcttext_metric_day }}
+										</p>
+										<p>
+											Night: {{ fcNext3.fcttext_metric_night }}
+										</p>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

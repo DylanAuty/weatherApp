@@ -65,8 +65,15 @@ body {
 	font-size: 2em;
 	font-style: italic;
 }
-#mainPanelIcon {
-	font-size: 4em;
+
+#panelIcon {
+	padding-top: 0.5em;
+	font-size: 3.5em;
+}
+
+.smallday-panel #panelIcon {
+	padding-top: 0.5em;
+	font-size: 3em;
 }
 
 /* Forecast page - style columns to be the same height */
@@ -86,4 +93,12 @@ body {
 
 #lowTemp {
 	font-size: 1.5em;
+}
+
+.smallday-panel #highTemp {
+	font-size: 2em;
+}
+
+.smallday-panel #lowTemp {
+	font-size: 1em;
 }
