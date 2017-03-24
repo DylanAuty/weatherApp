@@ -32,15 +32,17 @@ def index(request):
 
     try:
         # Every one of these should succeed. If any fails, it means a fresh forecast needs fetching.
+        # Age of forecast ignored for now - we serve up what we have and then check + update as necessary in the background. Most commonly accessed places won't need replacing.
         fcToday = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()).latest('retrieved')
         fcNext1 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=1)).latest('retrieved')
         fcNext2 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=2)).latest('retrieved')
         fcNext3 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=3)).latest('retrieved')
     except forecast.DoesNotExist:
-        
-        # If there is no forecast in the database then we need to retrieve and store it.
-        # The retrieval method will save and return the object, ideally it will save asynchronously.
-        pass
+        utils.getCurrentWeather()   # TODO: what if this fails?
+        fcToday = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()).latest('retrieved')
+        fcNext1 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=1)).latest('retrieved')
+        fcNext2 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=2)).latest('retrieved')
+        fcNext3 = forecast.objects.filter(location__api_ref_string = locationString, date = date.today()+timedelta(days=3)).latest('retrieved')
 
     context = {
             "currTime": datetime.now(),
