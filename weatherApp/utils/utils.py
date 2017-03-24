@@ -1,3 +1,9 @@
+from django.conf import settings
+from datetime import date, datetime, timedelta
+
+# Model imports
+from weatherApp.models import location, forecast, conditions
+
 import requests
 import json
 
@@ -19,7 +25,7 @@ def getAutocompleteResults(searchString):
     return APIResponseRaw.json()['RESULTS']
 
 
-def getCurrentWeather(request, locationString="/q/zmw:00000.1.03772"):
+def getCurrentWeather(locationString="/q/zmw:00000.1.03772"):
     """
     Fetches the current weather.
     If no locationString is provided, it uses the default (London, UK).
@@ -102,6 +108,4 @@ def getCurrentWeather(request, locationString="/q/zmw:00000.1.03772"):
 
         forecastArr[fc_index].save()
 
-
-
-
+    return 
