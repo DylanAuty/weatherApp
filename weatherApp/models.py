@@ -33,9 +33,6 @@ class location(models.Model):
     lat = models.CharField(max_length = 200)
     lon = models.CharField(max_length = 200)
 
-    
-
-
 class forecast(models.Model):
     """
     Represents a weather forecast.
@@ -93,19 +90,19 @@ class forecast(models.Model):
     fcttext_metric_night = models.CharField(max_length=200)
 
     # Raw weather data
-    pop = models.IntegerField()             # Probability of Precipitation. A percentage. This taken from simpleforecast, referring to the whole day.
-    pop_tf_day = models.IntegerField()      # As above, but taken from txt_forecast and referring to the day. Stored as sometimes the three pop fields don't correspond, so will be shown as given.
-    pop_tf_night = models.IntegerField()    # As above, but for night.
-    high = models.IntegerField()            # Temp. high in Celcius
-    low = models.IntegerField()             # Temp. low in Celcius.
+    pop = models.IntegerField(blank=True, null=True)             # Probability of Precipitation. A percentage. This taken from simpleforecast, referring to the whole day.
+    pop_tf_day = models.IntegerField(blank=True, null=True)      # As above, but taken from txt_forecast and referring to the day. Stored as sometimes the three pop fields don't correspond, so will be shown as given.
+    pop_tf_night = models.IntegerField(blank=True, null=True)    # As above, but for night.
+    high = models.IntegerField(blank=True, null=True)            # Temp. high in Celcius
+    low = models.IntegerField(blank=True, null=True)             # Temp. low in Celcius.
     conditions = models.CharField(max_length=200)         # Condition description.
-    max_windspeed = models.IntegerField()   # In Km/h
+    max_windspeed = models.IntegerField(blank=True, null=True)   # In Km/h
     max_winddir = models.CharField(max_length=20)  # Compass direction (NNE, ESE etc.)
-    ave_windspeed = models.IntegerField()
+    ave_windspeed = models.IntegerField(blank=True, null=True)
     ave_winddir = models.CharField(max_length=20)
-    ave_humidity = models.IntegerField()    # Percentage
-    max_humidity = models.IntegerField()    # Percentage, weirdly returns 0 sometimes.
-    min_humidity = models.IntegerField()    # Also 0 sometimes for no reason.
+    ave_humidity = models.IntegerField(blank=True, null=True)    # Percentage
+    max_humidity = models.IntegerField(blank=True, null=True)    # Percentage, weirdly returns 0 sometimes.
+    min_humidity = models.IntegerField(blank=True, null=True)    # Also 0 sometimes for no reason.
     
 class conditions(models.Model):
     """
@@ -138,18 +135,18 @@ class conditions(models.Model):
     observation_timestamp = models.DateTimeField()
     observation_tz = models.CharField(max_length=20)
     weather = models.CharField(max_length=100)
-    temperature = models.IntegerField()
-    humidity = models.IntegerField()
+    temperature = models.IntegerField(blank=True, null=True)
+    humidity = models.IntegerField(blank=True, null=True)
     wind_dir = models.CharField(max_length=20)
-    windspeed = models.IntegerField()
-    windspeed_gust = models.IntegerField()
-    pressure = models.IntegerField()
-    dewpoint = models.IntegerField()
-    feelslike = models.IntegerField()
-    visibility = models.IntegerField()
-    uv = models.IntegerField()
-    precip_1hr = models.IntegerField()
-    precip_today = models.IntegerField()
+    windspeed = models.IntegerField(blank=True, null=True)
+    windspeed_gust = models.IntegerField(blank=True, null=True)
+    pressure = models.IntegerField(blank=True, null=True)
+    dewpoint = models.IntegerField(blank=True, null=True)
+    feelslike = models.IntegerField(blank=True, null=True)
+    visibility = models.IntegerField(blank=True, null=True)
+    uv = models.IntegerField(blank=True, null=True)
+    precip_1hr = models.IntegerField(blank=True, null=True)
+    precip_today = models.IntegerField(blank=True, null=True)
     icon = models.CharField(max_length=20)
     icon_url = models.URLField(max_length=200)
     forecast_url = models.URLField(max_length=200)
