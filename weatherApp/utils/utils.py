@@ -1,3 +1,5 @@
+from django.http.response import JsonResponse
+
 from django.conf import settings
 from datetime import date, datetime, timedelta
 
@@ -7,23 +9,25 @@ from weatherApp.models import location, forecast, conditions
 import requests
 import json
 
-def getAutocompleteResults(searchString):
+def getAutocompleteResults(request):
     """
     Access the Wunderground API's autocomplete feature, which returns a
     JSON of possible locations matches.
     
     Arguments:
-    searchString -- The string to lookup. This will be input by the user (and sanitised).
+    Within request.post: searchString -- The string to lookup. This will be input by the user (and sanitised).
 
     Returns:
     locResults --   A dict containing multiple possible results - their names and refStrings.
     """
 
-    requestURL = "http://autocomplete.wunderground.com/aq?query=" + searchString
-    
-    APIResponseRaw = requests.get(requestURL)
-    return APIResponseRaw.json()['RESULTS']
+    requestURL = "http://autocomplete.wunderground.com/aq?query=" + request.POST['searchString']
 
+    APIResponseJSON = requests.get(requestURL).json()['RESULTS']
+    theResponse = {
+            "results": APIResponseJSON,
+            }
+    return JsonResponse(data=theResponse, safe=False)
 
 def getCurrentWeather(locationString="/q/zmw:00000.1.03772"):
     """
@@ -32,8 +36,6 @@ def getCurrentWeather(locationString="/q/zmw:00000.1.03772"):
     """
 
     requestURL = "http://api.wunderground.com/api/" + settings.WUNDERGROUND_API_KEY + "/geolookup/forecast" + locationString + ".json"
-    #requestURL = "http://127.0.0.1:8000/getExampleForecastJSON"
-
     APIResponseRaw = requests.get(requestURL)       # Keep raw data in case any other response info is needed.
     APIResponseDict = APIResponseRaw.json()
     ForecastDict = APIResponseDict['forecast']
