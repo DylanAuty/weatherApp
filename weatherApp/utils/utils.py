@@ -31,7 +31,8 @@ def getAutocompleteResults(request):
 
 def getCurrentWeather(locationString="/q/zmw:00000.1.03772"):
     """
-    Fetches the current weather.
+    Naively fetches the current weather. If the tagged location is not stored then
+    store that.
     If no locationString is provided, it uses the default (London, UK).
     """
 
@@ -107,7 +108,7 @@ def getCurrentWeather(locationString="/q/zmw:00000.1.03772"):
         forecastArr[fc_index].ave_humidity = simpleForecastDict[fc_index]['avehumidity']
         forecastArr[fc_index].max_humidity = simpleForecastDict[fc_index]['maxhumidity']
         forecastArr[fc_index].min_humidity = simpleForecastDict[fc_index]['minhumidity']
-
+        
         forecastArr[fc_index].save()
 
     return 
