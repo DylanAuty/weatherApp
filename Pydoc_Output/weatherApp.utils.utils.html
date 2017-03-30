@@ -1,0 +1,49 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module weatherApp.utils.utils</title>
+<meta charset="utf-8">
+</head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong><a href="weatherApp.html"><font color="#ffffff">weatherApp</font></a>.<a href="weatherApp.utils.html"><font color="#ffffff">utils</font></a>.utils</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/da-sol-vb/Documents/HealthUnlocked/weatherProj/weatherApp/utils/utils.py">/home/da-sol-vb/Documents/HealthUnlocked/weatherProj/weatherApp/utils/utils.py</a></font></td></tr></table>
+    <p></p>
+<p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="json.html">json</a><br>
+</td><td width="25%" valign=top><a href="requests.html">requests</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-getAutocompleteResults"><strong>getAutocompleteResults</strong></a>(request)</dt><dd><tt>Access&nbsp;the&nbsp;Wunderground&nbsp;API's&nbsp;autocomplete&nbsp;feature,&nbsp;which&nbsp;returns&nbsp;a<br>
+JSON&nbsp;of&nbsp;possible&nbsp;locations&nbsp;matches.<br>
+&nbsp;<br>
+Arguments:<br>
+Within&nbsp;request.post:&nbsp;searchString&nbsp;--&nbsp;The&nbsp;string&nbsp;to&nbsp;lookup.&nbsp;This&nbsp;will&nbsp;be&nbsp;input&nbsp;by&nbsp;the&nbsp;user&nbsp;(and&nbsp;sanitised).<br>
+&nbsp;<br>
+Returns:<br>
+locResults&nbsp;--&nbsp;&nbsp;&nbsp;A&nbsp;dict&nbsp;containing&nbsp;multiple&nbsp;possible&nbsp;results&nbsp;-&nbsp;their&nbsp;names&nbsp;and&nbsp;refStrings.</tt></dd></dl>
+ <dl><dt><a name="-getCurrentWeather"><strong>getCurrentWeather</strong></a>(locationString<font color="#909090">='/q/zmw:00000.1.03772'</font>)</dt><dd><tt>Naively&nbsp;fetches&nbsp;the&nbsp;current&nbsp;weather.&nbsp;If&nbsp;the&nbsp;tagged&nbsp;location&nbsp;is&nbsp;not&nbsp;stored&nbsp;then<br>
+store&nbsp;that.<br>
+If&nbsp;no&nbsp;locationString&nbsp;is&nbsp;provided,&nbsp;it&nbsp;uses&nbsp;the&nbsp;default&nbsp;(London,&nbsp;UK).</tt></dd></dl>
+</td></tr></table><p>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>settings</strong> = &lt;LazySettings "weatherProj.settings"&gt;</td></tr></table>
+</body></html>
