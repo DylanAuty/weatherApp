@@ -2,8 +2,7 @@
 A simple one-page weather app, written using Django and PostgreSQL.
 
 ## Dependencies
-
-## Launch
+Can be found in requirements.txt.
 
 ## Stack overview
 ### Backend
@@ -109,10 +108,10 @@ As a result of the above operation, performance of this query was improved. Mult
 ```
 
 ### Caching
-The landing page was cached using Memcached via the Django view. The performance improvement was significant. Expiry was set at 15 minutes, as this is the frequency of updates from Wunderground.
+The landing page was cached using Memcached via the Django view, with a custom decorator to vary with user cookies. The performance improvement was significant. Expiry was set at 15 minutes, as this is the frequency of updates from Wunderground.
 
 #### Django and Memcached - Application level caching
-In this case, a request must reach the Django server in order for the cached copy to be recalled, which adds overhead. However, it is very swift to implement and yields good results.
+In this case, a request must reach the Django server in order for the cached copy to be recalled, which adds overhead. However, it is very swift to implement and yields good results. In addition, it allows a separate cached version of the landing page to be built for each location. Users who search for another location will automatically see that location in the future, and as they request it a cached version will be created.
 
 ##### Before:
 No caching. ApacheBench used - 1000 requests with 10 max. concurrent connections.
