@@ -56,6 +56,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+
 ROOT_URLCONF = 'weatherProj.urls'
 
 TEMPLATES = [
@@ -90,6 +92,16 @@ DATABASES = {
         'PORT': '',
     }
 }
+
+# Cache setup
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+# Session setup, to remember last location.
 
 
 # Password validation
