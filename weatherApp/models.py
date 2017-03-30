@@ -21,7 +21,7 @@ class location(models.Model):
     * lon:              Longitude, in decimal degrees format.
     """
     
-    api_ref_string = models.CharField(max_length=200)
+    api_ref_string = models.CharField(primary_key=True, max_length=200)
     location_type = models.CharField(max_length=200)
     country = models.CharField(max_length=20)
     country_iso3166 = models.CharField(max_length=20)
@@ -74,8 +74,8 @@ class forecast(models.Model):
     
     # Metadata (time/location)
     location = models.ForeignKey('location', on_delete=models.CASCADE)
-    date = models.DateField()
-    retrieved = models.DateTimeField()
+    date = models.DateField(db_index=True)
+    retrieved = models.DateTimeField(db_index=True)
 
     # Icons
     icon_tf_day = models.CharField(max_length=20)           # From txt_forecast. Current max length used is 14.
