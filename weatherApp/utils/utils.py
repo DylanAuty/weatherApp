@@ -1,4 +1,5 @@
 from django.http.response import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from django.conf import settings
 from datetime import date, datetime, timedelta
@@ -9,6 +10,7 @@ from weatherApp.models import location, forecast, conditions
 import requests
 import json
 
+@csrf_exempt
 def getAutocompleteResults(request):
     """
     Access the Wunderground API's autocomplete feature, which returns a
